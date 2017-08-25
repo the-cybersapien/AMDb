@@ -31,7 +31,7 @@ public class HelperUtils {
 
     public static String makeHttpRequest(URL url) throws IOException {
 
-        String jsonResponse = "";
+        String jsonResponse;
         HttpsURLConnection urlConnection = null;
         InputStream inputStream = null;
 
@@ -70,7 +70,10 @@ public class HelperUtils {
 
     public static ArrayList<Movie> parseJSONList(String JSONString) {
 
-        ArrayList<Movie> movieList = new ArrayList<Movie>();
+        if (JSONString == null)
+            return null;
+
+        ArrayList<Movie> movieList = new ArrayList<>();
 
         try {
             //Create root

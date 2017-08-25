@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by ogcybersapien on 22/11/16.
@@ -14,7 +15,6 @@ import java.util.Date;
  */
 
 public class Movie {
-    private static final String LOG_TAG = Movie.class.getName();
     private static final String IMG_BASE_URL = "http://image.tmdb.org/t/p";
 
     private String title;
@@ -52,8 +52,8 @@ public class Movie {
     public String getReleaseDate() {
         String formattedRelease;
         try {
-            DateFormat originalDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = null;
+            DateFormat originalDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date date;
             date = originalDateFormat.parse(this.releaseDate);
             DateFormat dateFormat = DateFormat.getDateInstance();
             formattedRelease = dateFormat.format(date);
