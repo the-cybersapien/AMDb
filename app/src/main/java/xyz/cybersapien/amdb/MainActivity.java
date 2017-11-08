@@ -159,8 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<Movie> movies) {
-            // TODO Handle null
-            if (!performTask)
+            if (!performTask || movies == null || movies.isEmpty())
                 return;
 
             progressBar.setVisibility(View.GONE);

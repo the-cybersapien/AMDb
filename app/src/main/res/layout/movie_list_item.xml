@@ -17,6 +17,7 @@
             android:id="@+id/list_item_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/movie_poster"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

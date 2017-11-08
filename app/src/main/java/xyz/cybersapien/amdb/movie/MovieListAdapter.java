@@ -17,10 +17,6 @@ import java.util.ArrayList;
 import xyz.cybersapien.amdb.DetailActivity;
 import xyz.cybersapien.amdb.R;
 
-/**
- * Created by ogcybersapien on 24/8/17.
- */
-
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.ItemViewHolder> {
 
     private ArrayList<Movie> movies;

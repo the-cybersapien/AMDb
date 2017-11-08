@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by ogcybersapien on 22/11/16.
  * Wrapper Class for Movie object.
  */
 

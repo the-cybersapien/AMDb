@@ -46,6 +46,7 @@
             android:id="@+id/detail_backdrop_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/movie_backdrop"
             tools:src="@drawable/movie_placeholder" />
 
         <TextView
@@ -72,6 +73,7 @@
                 <ImageView
                     android:id="@+id/detail_poster_image"
                     android:layout_width="wrap_content"
+                    android:contentDescription="@string/movie_poster"
                     android:layout_height="wrap_content" />
 
                 <LinearLayout

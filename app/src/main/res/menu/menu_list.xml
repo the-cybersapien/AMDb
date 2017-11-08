@@ -13,11 +13,11 @@
             <group
                 android:checkableBehavior="single" >
                 <item android:id="@+id/sort_order_popularity"
-                    android:title="Popularity"
+                    android:title="@string/popularity"
                     app:showAsAction="never"
                     />
                 <item android:id="@+id/sort_order_rating"
-                android:title="Top Rated"
+                android:title="@string/top_rated"
                 app:showAsAction="never"
                     />
             </group>
