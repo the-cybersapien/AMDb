@@ -17,7 +17,6 @@ import javax.net.ssl.HttpsURLConnection;
 import xyz.cybersapien.amdb.movie.Movie;
 
 /**
- * Created by ogcybersapien on 22/11/16.
  * Helper methods for Parsing and getting data
  */
 
@@ -27,11 +26,11 @@ public class HelperUtils {
     private static final String LOG_TAG = HelperUtils.class.getName();
 
     public static final String BASE_URL = "https://api.themoviedb.org/3";
-    public static final String API_KEY = "{YOUR KEY HERE}";
+    public static final String API_KEY = "***REMOVED***";
 
     public static String makeHttpRequest(URL url) throws IOException {
 
-        String jsonResponse = "";
+        String jsonResponse;
         HttpsURLConnection urlConnection = null;
         InputStream inputStream = null;
 
@@ -70,7 +69,10 @@ public class HelperUtils {
 
     public static ArrayList<Movie> parseJSONList(String JSONString) {
 
-        ArrayList<Movie> movieList = new ArrayList<Movie>();
+        if (JSONString == null)
+            return null;
+
+        ArrayList<Movie> movieList = new ArrayList<>();
 
         try {
             //Create root

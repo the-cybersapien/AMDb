@@ -7,8 +7,12 @@
     <string name="action_sort_order">sort order</string>
 
     <string name="prefs_sort_order" translatable="false">sort_order</string>
+    <string name="popularity">Popularity</string>
     <string name="sort_order_popularity" translatable="false">popular</string>
+    <string name="top_rated">Top Rated</string>
     <string name="sort_order_rating" translatable="false">top_rated</string>
     <string name="loading">Loading..</string>
     <string name="error_getting_data">Error getting data!</string>
+    <string name="movie_backdrop">Movie Backdrop</string>
+    <string name="movie_poster">Movie Poster</string>
 </resources>
