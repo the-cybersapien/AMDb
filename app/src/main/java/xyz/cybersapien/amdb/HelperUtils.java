@@ -26,7 +26,7 @@ public class HelperUtils {
     private static final String LOG_TAG = HelperUtils.class.getName();
 
     public static final String BASE_URL = "https://api.themoviedb.org/3";
-    public static final String API_KEY = "***REMOVED***";
+    public static final String API_KEY = BuildConfig.MY_TMDB_KEY;
 
     public static String makeHttpRequest(URL url) throws IOException {
 
@@ -90,6 +90,7 @@ public class HelperUtils {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            return null;
         }
 
         return movieList;
