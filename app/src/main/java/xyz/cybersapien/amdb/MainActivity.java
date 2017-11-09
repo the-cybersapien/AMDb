@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -19,12 +17,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
-import xyz.cybersapien.amdb.movie.Movie;
-import xyz.cybersapien.amdb.movie.MovieListAdapter;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import xyz.cybersapien.amdb.adapter.MovieListAdapter;
+import xyz.cybersapien.amdb.model.Movie;
+import xyz.cybersapien.amdb.model.MovieList;
+import xyz.cybersapien.amdb.network.MovieService;
+import xyz.cybersapien.amdb.network.MoviesClient;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
     private Integer selectedId;
     private String sortOrder;
     private ArrayList<Movie> movieList;
+    private Retrofit retroClient;
+    private MovieService serviceInterface;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
 
         moviesAdapter = new MovieListAdapter(this, movieList);
         gridView.setAdapter(moviesAdapter);
-        GetListASyncTask getMovies = new GetListASyncTask();
-        getMovies.execute();
+        retroClient = MoviesClient.getClient();
+        serviceInterface = retroClient.create(MovieService.class);
+        performMovieSync();
     }
 
     @Override
@@ -82,16 +90,18 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.sort_order_popularity:
                 param = getString(R.string.sort_order_popularity);
-                break;
+                item.setChecked(true);
+                setSortOrder(param);
+                return true;
             case R.id.sort_order_rating:
                 param = getString(R.string.sort_order_rating);
-                break;
+                item.setChecked(true);
+                setSortOrder(param);
+                return true;
+            case R.id.demo_movie:
+                performMovieSync();
         }
-        if (param != null) {
-            item.setChecked(true);
-            setSortOrder(param);
-            return true;
-        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -101,8 +111,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(getString(R.string.prefs_sort_order), this.sortOrder);
         editor.apply();
-        GetListASyncTask getMovies = new GetListASyncTask();
-        getMovies.execute();
+        performMovieSync();
     }
 
     /**
@@ -115,62 +124,51 @@ public class MainActivity extends AppCompatActivity {
         return info != null && info.isConnected();
     }
 
-    private class GetListASyncTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
+    private void performMovieSync() {
 
-        boolean performTask;
-
-        @Override
-        protected void onPreExecute() {
-            performTask = isInternetConnected();
-            if (performTask) {
-                errorView.setVisibility(View.GONE);
-                progressBar.setVisibility(View.VISIBLE);
-                gridView.setVisibility(View.GONE);
-            } else {
-                Toast.makeText(MainActivity.this, "Error! No Internet!", Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
-                gridView.setVisibility(View.GONE);
-                errorView.setVisibility(View.VISIBLE);
-            }
-        }
-
-        @Override
-        protected ArrayList<Movie> doInBackground(Void... voids) {
-            if (!performTask) {
-                return null;
-            }
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-            String sortOrder = prefs.getString(getString(R.string.prefs_sort_order), getString(R.string.sort_order_popularity));
-            Uri.Builder discoverBuilder = Uri.parse(HelperUtils.BASE_URL).buildUpon();
-            discoverBuilder
-                    .appendPath("movie")
-                    .appendPath(sortOrder)
-                    .appendQueryParameter("api_key", HelperUtils.API_KEY)
-                    .appendQueryParameter("page", "1");
-            String jsonResponse = null;
-            try {
-                URL url = new URL(discoverBuilder.build().toString());
-                jsonResponse = HelperUtils.makeHttpRequest(url);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return HelperUtils.parseJSONList(jsonResponse);
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Movie> movies) {
-            if (!performTask || movies == null || movies.isEmpty())
-                return;
-
+        boolean performTask = isInternetConnected();
+        if (performTask) {
+            errorView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+            gridView.setVisibility(View.GONE);
+            makeRequest();
+        } else {
+            Toast.makeText(MainActivity.this, "Error! No Internet!", Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.GONE);
-            movieList.clear();
-            movieList.addAll(movies);
-            moviesAdapter.notifyDataSetChanged();
-            if (movies.size() > 0) {
-                gridView.setVisibility(View.VISIBLE);
-            } else {
-                errorView.setVisibility(View.VISIBLE);
-            }
+            gridView.setVisibility(View.GONE);
+            errorView.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void makeRequest() {
+
+        Call<MovieList> movies = serviceInterface.listMovies(sortOrder, BuildConfig.MY_TMDB_KEY);
+        movies.enqueue(new Callback<MovieList>() {
+            @Override
+            public void onResponse(Call<MovieList> call,
+                                   Response<MovieList> response) {
+                MovieList list = response.body();
+                if (list != null) {
+                    List<Movie> movieList = list.getMovies();
+                    refreshView(movieList);
+                }
+            }
+            @Override
+            public void onFailure(Call<MovieList> call, Throwable t) {}
+        });
+    }
+
+    private void refreshView(List<Movie> movies) {
+        if (movies == null || movies.isEmpty())
+            return;
+
+        progressBar.setVisibility(View.GONE);
+        movieList.clear();
+        movieList.addAll(movies);
+        moviesAdapter.notifyDataSetChanged();
+        if (movies.size() > 0)
+            gridView.setVisibility(View.VISIBLE);
+        else
+            gridView.setVisibility(View.GONE);
     }
 }

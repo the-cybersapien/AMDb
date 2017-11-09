@@ -17,7 +17,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URL;
 
-import xyz.cybersapien.amdb.movie.Movie;
+import xyz.cybersapien.amdb.model.Movie;
 
 public class DetailActivity extends AppCompatActivity {
 

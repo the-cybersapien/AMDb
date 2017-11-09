@@ -1,4 +1,4 @@
-package xyz.cybersapien.amdb.movie;
+package xyz.cybersapien.amdb.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import xyz.cybersapien.amdb.DetailActivity;
 import xyz.cybersapien.amdb.R;
+import xyz.cybersapien.amdb.model.Movie;
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.ItemViewHolder> {
 

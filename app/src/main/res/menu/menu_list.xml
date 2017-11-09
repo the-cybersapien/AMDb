@@ -10,19 +10,16 @@
         android:title="@string/action_sort_order"
         app:showAsAction="ifRoom">
         <menu>
-            <group
-                android:checkableBehavior="single" >
-                <item android:id="@+id/sort_order_popularity"
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/sort_order_popularity"
                     android:title="@string/popularity"
-                    app:showAsAction="never"
-                    />
-                <item android:id="@+id/sort_order_rating"
-                android:title="@string/top_rated"
-                app:showAsAction="never"
-                    />
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/sort_order_rating"
+                    android:title="@string/top_rated"
+                    app:showAsAction="never" />
             </group>
-
         </menu>
-
     </item>
 </menu>
