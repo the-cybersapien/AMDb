@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
         gridView.setAdapter(moviesAdapter);
         retroClient = MoviesClient.getClient();
         serviceInterface = retroClient.create(MovieService.class);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        this.sortOrder = prefs.getString(getString(R.string.prefs_sort_order), getString(R.string.sort_order_popularity));
         performMovieSync();
     }
 
@@ -98,8 +102,6 @@ public class MainActivity extends AppCompatActivity {
                 item.setChecked(true);
                 setSortOrder(param);
                 return true;
-            case R.id.demo_movie:
-                performMovieSync();
         }
 
         return super.onOptionsItemSelected(item);
@@ -128,20 +130,30 @@ public class MainActivity extends AppCompatActivity {
 
         boolean performTask = isInternetConnected();
         if (performTask) {
-            errorView.setVisibility(View.GONE);
-            progressBar.setVisibility(View.VISIBLE);
-            gridView.setVisibility(View.GONE);
+            setLoadingView();
             makeRequest();
         } else {
-            Toast.makeText(MainActivity.this, "Error! No Internet!", Toast.LENGTH_SHORT).show();
-            progressBar.setVisibility(View.GONE);
-            gridView.setVisibility(View.GONE);
-            errorView.setVisibility(View.VISIBLE);
+            setErrorView("Error! No internet!");
         }
     }
 
+    private void setLoadingView() {
+        errorView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        gridView.setVisibility(View.GONE);
+    }
+
+    private void setErrorView(String errorMessage) {
+        Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+        progressBar.setVisibility(View.GONE);
+        gridView.setVisibility(View.GONE);
+        errorView.setVisibility(View.VISIBLE);
+    }
+
+
     private void makeRequest() {
 
+        Log.d(LOG_TAG, "makeRequest: Starting request");
         Call<MovieList> movies = serviceInterface.listMovies(sortOrder, BuildConfig.MY_TMDB_KEY);
         movies.enqueue(new Callback<MovieList>() {
             @Override
@@ -153,8 +165,11 @@ public class MainActivity extends AppCompatActivity {
                     refreshView(movieList);
                 }
             }
+
             @Override
-            public void onFailure(Call<MovieList> call, Throwable t) {}
+            public void onFailure(Call<MovieList> call, Throwable t) {
+                Log.d(LOG_TAG, "onFailure: " + t.getMessage());
+            }
         });
     }
 
@@ -166,9 +181,12 @@ public class MainActivity extends AppCompatActivity {
         movieList.clear();
         movieList.addAll(movies);
         moviesAdapter.notifyDataSetChanged();
-        if (movies.size() > 0)
+        if (movies.size() > 0) {
+            errorView.setVisibility(View.GONE);
             gridView.setVisibility(View.VISIBLE);
-        else
+        } else {
+            errorView.setVisibility(View.VISIBLE);
             gridView.setVisibility(View.GONE);
+        }
     }
 }

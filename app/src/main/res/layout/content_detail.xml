@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movie_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="5dp"
+    android:visibility="visible"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/detail_backdrop_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/movie_backdrop"
+            android:maxHeight="150dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/movie_placeholder" />
+
+        <ImageView
+            android:id="@+id/detail_poster_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/movie_poster"
+            app:layout_constraintTop_toBottomOf="@id/detail_backdrop_image"
+            tools:src="@drawable/movie_placeholder" />
+
+        <TextView
+            android:id="@+id/detail_movie_title"
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            app:layout_constraintLeft_toRightOf="@id/detail_poster_image"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail_backdrop_image"
+            tools:text="Title" />
+
+        <TextView
+            android:id="@+id/detail_movie_desc"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="7dp"
+            app:layout_constraintBottom_toBottomOf="@id/detail_poster_image"
+            app:layout_constraintLeft_toRightOf="@id/detail_poster_image"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail_movie_title"
+            tools:text="@string/lorem_ipsum" />
+
+        <TextView
+            android:id="@+id/detail_movie_rating"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@drawable/ic_star"
+            android:drawableStart="@drawable/ic_star"
+            app:layout_constraintBottom_toBottomOf="@id/detail_movie_release"
+            app:layout_constraintLeft_toLeftOf="@+id/detail_poster_image"
+            app:layout_constraintRight_toLeftOf="@id/detail_movie_release"
+            app:layout_constraintTop_toBottomOf="@+id/detail_poster_image" />
+
+        <TextView
+            android:id="@+id/detail_movie_release"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/detail_movie_rating"
+            app:layout_constraintLeft_toRightOf="@id/detail_movie_rating"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/detail_movie_rating" />
+
+        <!-- TODO: Add Reviews and Trailer Views -->
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v4.widget.NestedScrollView>

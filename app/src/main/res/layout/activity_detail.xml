@@ -10,7 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -34,36 +35,37 @@
         android:textSize="18sp"
         android:visibility="gone" />
 
-    <LinearLayout
+
+    <ScrollView
         android:id="@+id/movie_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone"
-        tools:context="xyz.cybersapien.amdb.DetailActivity">
+        android:paddingTop="5dp"
+        android:visibility="visible">
 
-        <ImageView
-            android:id="@+id/detail_backdrop_image"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/movie_backdrop"
-            tools:src="@drawable/movie_placeholder" />
+            android:orientation="vertical"
+            tools:context="xyz.cybersapien.amdb.DetailActivity">
 
-        <TextView
-            android:id="@+id/detail_movie_title"
-            style="@style/TextAppearance.AppCompat.Headline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingStart="5dp"
-            tools:text="Title" />
+            <ImageView
+                android:id="@+id/detail_backdrop_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/movie_backdrop"
+                tools:src="@drawable/movie_placeholder" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="5dp">
+            <TextView
+                android:id="@+id/detail_movie_title"
+                style="@style/TextAppearance.AppCompat.Headline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingStart="5dp"
+                tools:text="Title" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -73,8 +75,9 @@
                 <ImageView
                     android:id="@+id/detail_poster_image"
                     android:layout_width="wrap_content"
-                    android:contentDescription="@string/movie_poster"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    tools:src="@drawable/movie_placeholder"
+                    android:contentDescription="@string/movie_poster" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -88,7 +91,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                        tools:text="@string/appbar_scrolling_view_behavior" />
+                        tools:text="Dummy Text for the Data just for FuN!" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -139,13 +142,9 @@
                             android:textSize="20sp"
                             tools:text="3.4" />
                     </LinearLayout>
-
                 </LinearLayout>
-
             </LinearLayout>
-
-        </ScrollView>
-
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
