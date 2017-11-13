@@ -53,12 +53,10 @@ public class MovieList {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("MoviesList{");
-        sb.append("movies=").append(movies);
-        sb.append(", page=").append(page);
-        sb.append(", totalPages=").append(totalPages);
-        sb.append(", totalResults=").append(totalResults);
-        sb.append('}');
-        return sb.toString();
+        return "MoviesList{" + "movies=" + movies +
+                ", page=" + page +
+                ", totalPages=" + totalPages +
+                ", totalResults=" + totalResults +
+                '}';
     }
 }

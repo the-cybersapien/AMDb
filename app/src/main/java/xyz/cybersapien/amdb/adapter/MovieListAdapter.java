@@ -14,6 +14,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.cybersapien.amdb.DetailActivity;
 import xyz.cybersapien.amdb.R;
 import xyz.cybersapien.amdb.model.Movie;
@@ -66,15 +68,16 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Item
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.list_item_image)
         public ImageView imageView;
+        @BindView(R.id.list_item_title)
         public TextView titleView;
         public View rootView;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             rootView = itemView;
-            imageView = itemView.findViewById(R.id.list_item_image);
-            titleView = itemView.findViewById(R.id.list_item_title);
+            ButterKnife.bind(this, rootView);
         }
     }
 }

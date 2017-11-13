@@ -21,6 +21,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,9 +38,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private MovieListAdapter moviesAdapter;
-    private LinearLayout progressBar;
-    private TextView errorView;
-    private RecyclerView gridView;
+    @BindView(R.id.progress_bar)
+    public LinearLayout progressBar;
+    @BindView(R.id.error_text)
+    public TextView errorView;
+    @BindView(R.id.movie_list)
+    public RecyclerView gridView;
     private Integer selectedId;
     private String sortOrder;
     private ArrayList<Movie> movieList;
@@ -50,13 +55,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        progressBar = findViewById(R.id.progress_bar);
-        gridView = findViewById(R.id.movie_list);
-        errorView = findViewById(R.id.error_text);
 
         movieList = new ArrayList<>();
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
@@ -154,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
     private void makeRequest() {
 
         Log.d(LOG_TAG, "makeRequest: Starting request");
-        Call<MovieList> movies = serviceInterface.listMovies(sortOrder, BuildConfig.MY_TMDB_KEY);
+        Call<MovieList> movies = serviceInterface.listMovies(sortOrder);
         movies.enqueue(new Callback<MovieList>() {
             @Override
             public void onResponse(Call<MovieList> call,

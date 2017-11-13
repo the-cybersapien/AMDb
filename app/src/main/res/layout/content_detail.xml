@@ -58,27 +58,90 @@
             tools:text="@string/lorem_ipsum" />
 
         <TextView
-            android:id="@+id/detail_movie_rating"
+            android:id="@+id/detail_movie_rating_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:drawableLeft="@drawable/ic_star"
-            android:drawableStart="@drawable/ic_star"
+            android:layout_marginTop="8dp"
+            android:padding="5dp"
+            android:text="@string/average_review"
             app:layout_constraintBottom_toBottomOf="@id/detail_movie_release"
             app:layout_constraintLeft_toLeftOf="@+id/detail_poster_image"
             app:layout_constraintRight_toLeftOf="@id/detail_movie_release"
             app:layout_constraintTop_toBottomOf="@+id/detail_poster_image" />
 
         <TextView
+            android:id="@+id/detail_movie_release_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/release_date"
+            app:layout_constraintBottom_toBottomOf="@id/detail_movie_rating_title"
+            app:layout_constraintLeft_toRightOf="@id/detail_movie_rating_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/detail_movie_rating_title" />
+
+        <TextView
+            android:id="@+id/detail_movie_rating"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_star"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/ic_star"
+            android:padding="10dp"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/detail_movie_release"
+            app:layout_constraintLeft_toLeftOf="@+id/detail_poster_image"
+            app:layout_constraintRight_toLeftOf="@id/detail_movie_release"
+            app:layout_constraintTop_toBottomOf="@+id/detail_movie_rating_title" />
+
+        <TextView
             android:id="@+id/detail_movie_release"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="@id/detail_movie_rating"
             app:layout_constraintLeft_toRightOf="@id/detail_movie_rating"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/detail_movie_rating" />
 
-        <!-- TODO: Add Reviews and Trailer Views -->
+        <TextView
+            android:id="@+id/reviews_list_heading"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/reviews"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail_movie_release" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/reviews_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reviews_list_heading" />
+
+        <TextView
+            android:id="@+id/trailers_text_view"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/trailers"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reviews_list_view" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/trailers_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trailers_text_view" />
+
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v4.widget.NestedScrollView>

@@ -205,9 +205,19 @@ public class Movie {
         public void setType(String type) {
             this.type = type;
         }
+
+        @Override
+        public String toString() {
+            return "VideoResults{" + "videoKey='" + videoKey + '\'' +
+                    ", website='" + website + '\'' +
+                    ", title='" + title + '\'' +
+                    ", size='" + size + '\'' +
+                    ", type='" + type + '\'' +
+                    '}';
+        }
     }
 
-    private static class MovieReviews {
+    public static class MovieReviews {
         @SerializedName("results")
         private List<ReviewResults> reviews;
 
@@ -220,7 +230,7 @@ public class Movie {
         }
     }
 
-    private static class ReviewResults {
+    public static class ReviewResults {
         @SerializedName("author")
         private String author;
 
