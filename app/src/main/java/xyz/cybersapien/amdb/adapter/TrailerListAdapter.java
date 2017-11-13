@@ -42,6 +42,7 @@ public class TrailerListAdapter extends RecyclerView.Adapter<TrailerListAdapter.
     @Override
     public TrailerListAdapter.ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.movie_trailer_list_item, parent, false);
+        // If there is more than 1 item, decrease the size a little to give a visual indication to the user
         if (trailerList.size() > 1) {
             Configuration config = context.getResources().getConfiguration();
             int screenWidthDp = (config.screenWidthDp * 25) / 9;
@@ -68,7 +69,6 @@ public class TrailerListAdapter extends RecyclerView.Adapter<TrailerListAdapter.
                 }
             }
         });
-        Log.d(TAG, "onBindViewHolder: " + currentVideo);
     }
 
     @Override

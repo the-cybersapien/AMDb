@@ -20,6 +20,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import xyz.cybersapien.amdb.adapter.ReviewsListAdapter;
 import xyz.cybersapien.amdb.adapter.TrailerListAdapter;
 import xyz.cybersapien.amdb.model.Movie;
 import xyz.cybersapien.amdb.network.MovieService;
@@ -47,8 +48,8 @@ public class DetailActivity extends AppCompatActivity {
     public TextView movieRating;
     @BindView(R.id.detail_movie_release)
     public TextView movieRelease;
-    //    @BindView(R.id.reviews_list_view)
-//    public RecyclerView reviewsRecyclerView;
+    @BindView(R.id.reviews_list_view)
+    public RecyclerView reviewsRecyclerView;
     @BindView(R.id.trailers_list_view)
     public RecyclerView trailersRecyclerView;
 
@@ -59,6 +60,7 @@ public class DetailActivity extends AppCompatActivity {
     private TrailerListAdapter trailersAdapter;
 
     private ArrayList<Movie.ReviewResults> movieReviews;
+    private ReviewsListAdapter reviewsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +68,17 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
         String movieId = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+        Log.d(TAG, "onCreate:" + movieId);
         retroClient = MoviesClient.getClient();
         movieService = retroClient.create(MovieService.class);
 
         movieReviews = new ArrayList<>();
         trailerVideos = new ArrayList<>();
 
-        //reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        reviewsAdapter = new ReviewsListAdapter(movieReviews, this);
+        reviewsRecyclerView.setAdapter(reviewsAdapter);
+
         trailersRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         trailersAdapter = new TrailerListAdapter(trailerVideos, this);
         trailersRecyclerView.setAdapter(trailersAdapter);
@@ -108,11 +114,14 @@ public class DetailActivity extends AppCompatActivity {
             public void onResponse(Call<Movie.MovieVideos> call, Response<Movie.MovieVideos> response) {
                 if (response.isSuccessful()) {
                     Movie.MovieVideos videos = response.body();
-                    Log.d(TAG, "onResponse: " + (videos != null ? videos.toString() : null));
-                    if (videos != null) {
+                    if (videos == null || videos.getVideos().size() == 0) {
+                        findViewById(R.id.trailers_text_view).setVisibility(View.GONE);
+                        trailersRecyclerView.setVisibility(View.GONE);
+                    } else {
+                        findViewById(R.id.trailers_text_view).setVisibility(View.VISIBLE);
+                        trailersRecyclerView.setVisibility(View.VISIBLE);
                         trailerVideos.clear();
                         trailerVideos.addAll(videos.getVideos());
-                        Log.d(TAG, "onResponse: " + trailerVideos);
                         trailersAdapter.notifyDataSetChanged();
                     }
                 }
@@ -131,10 +140,15 @@ public class DetailActivity extends AppCompatActivity {
             public void onResponse(Call<Movie.MovieReviews> call, Response<Movie.MovieReviews> response) {
                 if (response.isSuccessful()) {
                     Movie.MovieReviews reviews = response.body();
-                    if (reviews != null) {
+                    if (reviews != null && !reviews.getReviews().isEmpty()) {
                         movieReviews.clear();
                         movieReviews.addAll(reviews.getReviews());
-                        //TODO: reviewsAdapter.notifyDataSetChanged();
+                        reviewsAdapter.notifyDataSetChanged();
+                        findViewById(R.id.reviews_list_heading).setVisibility(View.VISIBLE);
+                        reviewsRecyclerView.setVisibility(View.VISIBLE);
+                    } else {
+                        findViewById(R.id.reviews_list_heading).setVisibility(View.GONE);
+                        reviewsRecyclerView.setVisibility(View.GONE);
                     }
                 }
             }
@@ -153,7 +167,7 @@ public class DetailActivity extends AppCompatActivity {
 
         // Now that we have the movie data, show it, and load the reviews and trailers
         getMovieTrailers(movie.getMovieId());
-        // TODO: getMovieReviews(movie.getMovieId());
+        getMovieReviews(movie.getMovieId());
 
         Integer densityDpi = getResources().getDisplayMetrics().densityDpi;
         Picasso.with(getBaseContext())
