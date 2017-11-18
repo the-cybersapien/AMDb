@@ -2,13 +2,16 @@ package xyz.cybersapien.amdb;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -30,18 +33,12 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String TAG = DetailActivity.class.getName();
 
-    @BindView(R.id.progress_bar)
-    public View progressView;
-    @BindView(R.id.error_text)
-    public TextView errorTextView;
-    @BindView(R.id.movie_detail)
-    public View detailsRootView;
+    @BindView(R.id.content_detail)
+    public View rootView;
     @BindView(R.id.detail_backdrop_image)
     public ImageView backdropImageView;
     @BindView(R.id.detail_poster_image)
     public ImageView posterImageView;
-    @BindView(R.id.detail_movie_title)
-    public TextView titleTextView;
     @BindView(R.id.detail_movie_desc)
     public TextView descTextView;
     @BindView(R.id.detail_movie_rating)
@@ -52,6 +49,14 @@ public class DetailActivity extends AppCompatActivity {
     public RecyclerView reviewsRecyclerView;
     @BindView(R.id.trailers_list_view)
     public RecyclerView trailersRecyclerView;
+
+    // Toolbar
+    @BindView(R.id.toolbar)
+    public Toolbar toolbar;
+    @BindView(R.id.toolbar_layout)
+    public CollapsingToolbarLayout collapsingToolbar;
+    // Loading DialogView
+    private AlertDialog loadingDialog;
 
     private Retrofit retroClient;
     private MovieService movieService;
@@ -68,7 +73,12 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
         String movieId = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-        Log.d(TAG, "onCreate:" + movieId);
+
+        collapsingToolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         retroClient = MoviesClient.getClient();
         movieService = retroClient.create(MovieService.class);
 
@@ -168,38 +178,35 @@ public class DetailActivity extends AppCompatActivity {
         // Now that we have the movie data, show it, and load the reviews and trailers
         getMovieTrailers(movie.getMovieId());
         getMovieReviews(movie.getMovieId());
+        rootView.setVisibility(View.VISIBLE);
 
         Integer densityDpi = getResources().getDisplayMetrics().densityDpi;
         Picasso.with(getBaseContext())
                 .load(movie.getBackDropPath(densityDpi))
-                .fit()
-                .placeholder(R.drawable.movie_placeholder)
                 .into(backdropImageView);
         Picasso.with(getBaseContext())
                 .load(movie.getPosterPath(densityDpi))
                 .fit()
                 .placeholder(R.drawable.movie_placeholder)
                 .into(posterImageView);
-        titleTextView.setText(movie.getTitle());
+        collapsingToolbar.setTitle(movie.getTitle());
         descTextView.setText(movie.getOverview());
         movieRating.setText(String.valueOf(movie.getVoteAvg()));
         movieRelease.setText(movie.getReleaseDate());
-
-        detailsRootView.setVisibility(View.VISIBLE);
-        progressView.setVisibility(View.GONE);
-        errorTextView.setVisibility(View.GONE);
+        loadingDialog.dismiss();
     }
 
     private void showError(String message) {
-        errorTextView.setText(message);
-        errorTextView.setVisibility(View.VISIBLE);
-        progressView.setVisibility(View.GONE);
-        detailsRootView.setVisibility(View.GONE);
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        loadingDialog.dismiss();
+        finish();
     }
 
     private void showLoading() {
-        progressView.setVisibility(View.VISIBLE);
-        errorTextView.setVisibility(View.GONE);
-        detailsRootView.setVisibility(View.GONE);
+        rootView.setVisibility(View.INVISIBLE);
+        loadingDialog = new AlertDialog.Builder(this)
+                .setView(R.layout.dialog_loading_view)
+                .create();
+        loadingDialog.show();
     }
 }

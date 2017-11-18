@@ -2,60 +2,27 @@
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/movie_detail"
+    android:id="@+id/content_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="5dp"
+    android:padding="5dp"
     android:visibility="visible"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/detail_backdrop_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/movie_backdrop"
-            android:maxHeight="150dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/movie_placeholder" />
-
-        <ImageView
             android:id="@+id/detail_poster_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/movie_poster"
-            app:layout_constraintTop_toBottomOf="@id/detail_backdrop_image"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/detail_movie_rating_title"
+            app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/movie_placeholder" />
-
-        <TextView
-            android:id="@+id/detail_movie_title"
-            style="@style/TextAppearance.AppCompat.Headline"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:maxLines="2"
-            app:layout_constraintLeft_toRightOf="@id/detail_poster_image"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/detail_backdrop_image"
-            tools:text="Title" />
-
-        <TextView
-            android:id="@+id/detail_movie_desc"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:padding="7dp"
-            app:layout_constraintBottom_toBottomOf="@id/detail_poster_image"
-            app:layout_constraintLeft_toRightOf="@id/detail_poster_image"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/detail_movie_title"
-            tools:text="@string/lorem_ipsum" />
 
         <TextView
             android:id="@+id/detail_movie_rating_title"
@@ -64,45 +31,59 @@
             android:layout_marginTop="8dp"
             android:padding="5dp"
             android:text="@string/average_review"
-            app:layout_constraintBottom_toBottomOf="@id/detail_movie_release"
-            app:layout_constraintLeft_toLeftOf="@+id/detail_poster_image"
-            app:layout_constraintRight_toLeftOf="@id/detail_movie_release"
-            app:layout_constraintTop_toBottomOf="@+id/detail_poster_image" />
-
-        <TextView
-            android:id="@+id/detail_movie_release_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/release_date"
-            app:layout_constraintBottom_toBottomOf="@id/detail_movie_rating_title"
-            app:layout_constraintLeft_toRightOf="@id/detail_movie_rating_title"
+            android:textSize="22sp"
+            app:layout_constraintLeft_toRightOf="@id/detail_poster_image"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/detail_movie_rating_title" />
+            app:layout_constraintTop_toTopOf="@id/detail_poster_image" />
 
         <TextView
             android:id="@+id/detail_movie_rating"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_star"
-            android:drawablePadding="5dp"
+            android:drawablePadding="10dp"
             android:drawableStart="@drawable/ic_star"
             android:padding="10dp"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@id/detail_movie_release"
-            app:layout_constraintLeft_toLeftOf="@+id/detail_poster_image"
-            app:layout_constraintRight_toLeftOf="@id/detail_movie_release"
-            app:layout_constraintTop_toBottomOf="@+id/detail_movie_rating_title" />
+            app:layout_constraintLeft_toLeftOf="@+id/detail_movie_rating_title"
+            app:layout_constraintRight_toRightOf="@id/detail_movie_rating_title"
+            app:layout_constraintTop_toBottomOf="@+id/detail_movie_rating_title"
+            tools:text="10000" />
+
+
+        <TextView
+            android:id="@+id/detail_movie_release_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/release_date"
+            android:textSize="22sp"
+            app:layout_constraintLeft_toLeftOf="@id/detail_movie_rating_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail_movie_rating" />
 
         <TextView
             android:id="@+id/detail_movie_release"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="@id/detail_movie_rating"
-            app:layout_constraintLeft_toRightOf="@id/detail_movie_rating"
+            app:layout_constraintLeft_toLeftOf="@id/detail_movie_release_title"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/detail_movie_rating" />
+            app:layout_constraintTop_toBottomOf="@id/detail_movie_release_title" />
+
+        <TextView
+            android:id="@+id/detail_movie_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:padding="7dp"
+            app:layout_constraintLeft_toLeftOf="@id/detail_poster_image"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail_poster_image"
+            tools:text="@string/lorem_ipsum" />
 
         <TextView
             android:id="@+id/reviews_list_heading"
@@ -114,7 +95,7 @@
             android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/detail_movie_release" />
+            app:layout_constraintTop_toBottomOf="@id/detail_movie_desc" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/reviews_list_view"

@@ -61,6 +61,12 @@ public class ReviewsListAdapter extends RecyclerView.Adapter<ReviewsListAdapter.
                 context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(currentResult.getUrl())));
             }
         });
+        holder.reviewDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(currentResult.getUrl())));
+            }
+        });
     }
 
     @Override
