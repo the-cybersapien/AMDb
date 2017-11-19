@@ -26,9 +26,4 @@
             </group>
         </menu>
     </item>
-
-    <item
-        android:id="@+id/device_manager"
-        android:title="Device Manager"
-        app:showAsAction="never" />
 </menu>

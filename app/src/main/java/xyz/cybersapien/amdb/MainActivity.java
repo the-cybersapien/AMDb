@@ -32,7 +32,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import xyz.cybersapien.amdb.adapter.MovieListAdapter;
-import xyz.cybersapien.amdb.database.AndroidDatabaseManager;
 import xyz.cybersapien.amdb.database.MovieContract;
 import xyz.cybersapien.amdb.model.Movie;
 import xyz.cybersapien.amdb.model.MovieList;
