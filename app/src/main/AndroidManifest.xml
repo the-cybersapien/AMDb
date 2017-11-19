@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -30,6 +30,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <activity
+            android:name=".database.AndroidDatabaseManager"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <provider
+            android:name=".database.MovieProvider"
+            android:authorities="xyz.cybersapien.amdb"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

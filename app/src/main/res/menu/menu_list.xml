@@ -19,7 +19,16 @@
                     android:id="@+id/sort_order_rating"
                     android:title="@string/top_rated"
                     app:showAsAction="never" />
+                <item
+                    android:id="@+id/show_favourites"
+                    android:title="@string/favourites"
+                    app:showAsAction="never" />
             </group>
         </menu>
     </item>
+
+    <item
+        android:id="@+id/device_manager"
+        android:title="Device Manager"
+        app:showAsAction="never" />
 </menu>

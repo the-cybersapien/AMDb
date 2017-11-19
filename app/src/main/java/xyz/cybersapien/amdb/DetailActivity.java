@@ -1,13 +1,22 @@
 package xyz.cybersapien.amdb;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,13 +34,17 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import xyz.cybersapien.amdb.adapter.ReviewsListAdapter;
 import xyz.cybersapien.amdb.adapter.TrailerListAdapter;
+import xyz.cybersapien.amdb.database.MovieContract;
+import xyz.cybersapien.amdb.database.MovieProvider;
 import xyz.cybersapien.amdb.model.Movie;
 import xyz.cybersapien.amdb.network.MovieService;
 import xyz.cybersapien.amdb.network.MoviesClient;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String TAG = DetailActivity.class.getName();
+
+    public static final int FAVOURITE_LOADER_MANAGER = 1002;
 
     @BindView(R.id.content_detail)
     public View rootView;
@@ -50,6 +63,10 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.trailers_list_view)
     public RecyclerView trailersRecyclerView;
 
+    @BindView(R.id.favourite_fab)
+    public FloatingActionButton fovourite_fab;
+    private boolean isFavourite = false;
+
     // Toolbar
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
@@ -66,6 +83,8 @@ public class DetailActivity extends AppCompatActivity {
 
     private ArrayList<Movie.ReviewResults> movieReviews;
     private ReviewsListAdapter reviewsAdapter;
+
+    private Movie movie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +112,27 @@ public class DetailActivity extends AppCompatActivity {
         trailersAdapter = new TrailerListAdapter(trailerVideos, this);
         trailersRecyclerView.setAdapter(trailersAdapter);
 
+        fovourite_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isFavourite) {
+                    saveAsFavourite();
+                } else {
+                    removeFromFavourite();
+                }
+            }
+        });
+
         getMovieDetails(movieId);
+    }
+
+    private void toggleFavView() {
+        if (isFavourite) {
+            fovourite_fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite));
+        } else {
+            fovourite_fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_border));
+        }
+        fovourite_fab.setVisibility(View.VISIBLE);
     }
 
     public void getMovieDetails(String movieId) {
@@ -175,6 +214,11 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
+        this.movie = movie;
+
+        // Get the Favourite Info from the Database
+        getSupportLoaderManager().initLoader(FAVOURITE_LOADER_MANAGER, null, this);
+
         // Now that we have the movie data, show it, and load the reviews and trailers
         getMovieTrailers(movie.getMovieId());
         getMovieReviews(movie.getMovieId());
@@ -208,5 +252,46 @@ public class DetailActivity extends AppCompatActivity {
                 .setView(R.layout.dialog_loading_view)
                 .create();
         loadingDialog.show();
+    }
+
+    private void saveAsFavourite() {
+        ContentValues values = new ContentValues();
+        values.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movie.getMovieId());
+        values.put(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE, movie.getTitle());
+        values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+        getContentResolver().insert(MovieContract.MovieEntry.MOVIES_CONTENT_URI, values);
+        isFavourite = true;
+        toggleFavView();
+    }
+
+    private void removeFromFavourite() {
+        Uri reqUri = MovieProvider.getUriFromID(movie.getMovieId());
+        getContentResolver().delete(reqUri, null, null);
+        isFavourite = false;
+        toggleFavView();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        String[] projection = {
+                MovieContract.MovieEntry._ID,
+                MovieContract.MovieEntry.COLUMN_MOVIE_ID
+        };
+        return new CursorLoader(this,
+                MovieProvider.getUriFromID(movie.getMovieId()),
+                projection, null,
+                null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        Log.d(TAG, "onLoadFinished: " + cursor.getCount());
+        if (cursor.getCount() > 0)
+            isFavourite = true;
+        toggleFavView();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
     }
 }

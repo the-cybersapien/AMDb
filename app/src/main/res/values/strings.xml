@@ -20,4 +20,6 @@
     <string name="trailers">Trailers</string>
     <string name="movie_trailer_thumbnail">Movie Trailer Thumbnail</string>
     <string name="average_review">Average Review</string>
+    <string name="favourites">Favourites</string>
+    <string name="no_favourites">No Favourites Found!</string>
 </resources>

@@ -43,7 +43,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Item
         Uri posterUri = currentMovie.getPosterPath(context.getResources().getDisplayMetrics().densityDpi);
 
         Picasso.with(context)
-                .load(posterUri).fit()
+                .load(posterUri)
                 .placeholder(R.drawable.movie_placeholder)
                 .error(R.drawable.notification_error)
                 .into(holder.imageView);
