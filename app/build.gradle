@@ -27,8 +27,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
-    // Using the beta here since the functionality I need is only available in the beta for now.
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta4'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.jakewharton:butterknife:8.8.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
