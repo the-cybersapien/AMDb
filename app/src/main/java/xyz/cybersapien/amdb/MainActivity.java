@@ -114,9 +114,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 item.setChecked(true);
                 showFavourites();
                 return true;
-            case R.id.device_manager:
-                startActivity(new Intent(MainActivity.this, AndroidDatabaseManager.class));
-                return true;
         }
 
         return super.onOptionsItemSelected(item);
